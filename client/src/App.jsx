@@ -4,6 +4,8 @@ import { createBrowserRouter } from "react-router-dom";
 import Mainlayout from "./layout/Mainlayout";
 import { RouterProvider } from "react-router";
 import Courses from "./pages/student/Courses";
+import Mylearning from "./pages/student/Mylearning";
+import Profile from "./pages/student/Profile";
 
 const appRouter = createBrowserRouter([
   {
@@ -20,9 +22,17 @@ const appRouter = createBrowserRouter([
         ),
       },
       {
-        path: "/login",
+        path: "login",
         element: <Login />,
-      }
+      },
+      {
+        path: "my-learning",
+        element: <Mylearning />,
+      },
+      {
+        path: "profile",
+        element: <Profile />,
+      },
     ],
   },
 ]);
