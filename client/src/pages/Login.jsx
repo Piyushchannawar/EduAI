@@ -81,7 +81,7 @@ const Login = () => {
       navigate("/");
     }
     if(loginError){
-      toast.error(loginError.data?.message || "Login failed!");
+      toast.error(loginError.data.message || "Login failed!");
     }
   }, [
     loginIsLoading,
@@ -94,7 +94,7 @@ const Login = () => {
 
   return (
     <div className="flex items-center w-full justify-center mt-20">
-      <Tabs defaultValue="signup" className="w-[400px]">
+      <Tabs defaultValue="login" className="w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="signup">Signup</TabsTrigger>
           <TabsTrigger value="login">Login</TabsTrigger>

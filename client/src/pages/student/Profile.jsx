@@ -50,6 +50,7 @@ function Profile() {
 
      useEffect(() => {
   if (isSuccess) {
+    refetch();
     toast.success(updateUserData?.message || "Profile updated successfully");
   }
 
@@ -73,7 +74,7 @@ if (isLoading) return <h1>Profile Loading...</h1>;
         <div className="flex flex-col item-center ">
           <Avatar className="h-24 w-24 md:h-32 md:w-32 mb-4">
             <AvatarImage
-              src={user.photoUrl || "https://github.com/shadcn.png"}
+              src={user?.photoUrl || "https://github.com/shadcn.png"}
             />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>

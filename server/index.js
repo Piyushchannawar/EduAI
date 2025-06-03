@@ -4,6 +4,7 @@ import connectDB from './database/dbConnect.js';
 import userRoute from "./routes/user.route.js"
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import courseRoute from "./routes/course.route.js"
 
 
 dotenv.config();
@@ -28,7 +29,8 @@ const PORT = process.env.PORT || 3000;
 
 // apis
 
-app.use("/api/v1/user",userRoute)
+app.use("/api/v1/user",userRoute);
+app.use("/api/v1/course",courseRoute);
 
 
 
