@@ -72,7 +72,7 @@ useEffect(()=>{
                 <DropdownMenuSeparator />
                 {
                   user.role === "instructor" &&<>
-                   <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                   <DropdownMenuItem><Link to="/admin/dashboard">Dashboard</Link></DropdownMenuItem>
                   </> 
                 }
               

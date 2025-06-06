@@ -1,58 +1,22 @@
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { useGetCreatorCourseQuery } from '@/features/api/courseApi';
+import { Edit } from 'lucide-react';
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-];
 
 
 
 function CourseTable() {
     const navigate = useNavigate();
+    const {data, isLoading} = useGetCreatorCourseQuery();
+
+    if(isLoading) {
+     return <h1 className='text-center text-2xl font-bold'>Loading...</h1>
+    }
+    
   return (
     <div>
         <Button onClick={()=> navigate("create")}>
@@ -69,17 +33,15 @@ function CourseTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {invoices.map((invoice) => (
-            <TableRow key={invoice.invoice}>
-              <TableCell>{invoice.totalAmount}</TableCell>
-              <TableCell>
-                <Badge variant={invoice.paymentStatus === "Paid" ? "success" : invoice.paymentStatus === "Pending" ? "warning" : "destructive"}>
-                  {invoice.paymentStatus}
-                </Badge>
-              </TableCell>
-              <TableCell>{invoice.invoice}</TableCell>
+           {data.courses.map((course) => (
+            <TableRow key={course._id}>
+              <TableCell className="font-medium">{course?.coursePrice || "NA"}</TableCell>
+              <TableCell> <Badge>{course.isPublished ? "Published" : "Draft"}</Badge> </TableCell>
+              <TableCell>{course.courseTitle}</TableCell>
               <TableCell className="text-right">
-                <Button variant="outline">View</Button>
+                 <Button 
+                 className="transition-all duration-300 hover:bg-gray-100 hover:text-blue-600 cursor-pointer"
+                 size='sm'  variant='ghost' onClick={() => navigate(`${course._id}`)}><Edit/></Button>
               </TableCell>
             </TableRow>
           ))}
