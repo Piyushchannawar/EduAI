@@ -18,7 +18,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import React from "react";
+import { Loader2 } from "lucide-react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function CourseTab() {
   const isPublished = true;
@@ -32,12 +34,53 @@ function CourseTab() {
     courseThumbnail: "",
   });
 
+  const [previewThumnail, setPreviewThumbnail] = useState("");
+
   const changeEventHandler = (e) => {
     setInput({
       ...input,
       [e.target.name]: e.target.value,
     });
   };
+
+  const selectCategory = (value) => {
+    setInput({
+      ...input,
+      category: value,
+    });
+  };
+  const selectCourseLevel = (value) => {
+    setInput({
+      ...input,
+      courseLevel: value,
+    });
+  };
+
+  // get file
+  const selectThumbnail = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setInput({
+        ...input,
+        courseThumbnail: file,
+      });
+      const fileReader = new FileReader();
+      fileReader.onloadend = () => {
+        setPreviewThumbnail(fileReader.result);
+        
+      };
+      fileReader.readAsDataURL(file);
+    }
+  };
+
+  const updateCourseHandler = () => {
+    // Function to handle course update logic
+    // This function will typically involve making an API call to update the course details
+    console.log("Course updated with data:", input);
+  }
+
+  const isLoading = false;
+  const navigate = useNavigate();
 
   return (
     <Card>
@@ -72,9 +115,10 @@ function CourseTab() {
             <Input
               type="text"
               value={input.subTitle}
+
               onChange={changeEventHandler}
               placeholder="Enter course subtitle"
-              name="subtitle"
+              name="subTitle"
             />
           </div>
           <div>
@@ -84,7 +128,7 @@ function CourseTab() {
           <div className="flex items-center gap-5">
             <div>
               <Label>Category</Label>
-              <Select>
+              <Select onValueChange={selectCategory}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Select Your Catagory" />
                 </SelectTrigger>
@@ -113,7 +157,7 @@ function CourseTab() {
             </div>
             <div>
               <Label>Course Level</Label>
-              <Select>
+              <Select onValueChange={selectCourseLevel}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Select a course level" />
                 </SelectTrigger>
@@ -122,13 +166,53 @@ function CourseTab() {
                     <SelectLabel>Course Level</SelectLabel>
                     <SelectItem value="Beginner">Beginner</SelectItem>
                     <SelectItem value="Medium">Medium</SelectItem>
-                    <SelectItem value="Advance">
-                      Advance
-                    </SelectItem>
+                    <SelectItem value="Advance">Advance</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
             </div>
+            <div>
+              <Label>Price in (INR)</Label>
+              <Input
+                type="number"
+                name="coursePrice"
+                value={input.coursePrice}
+                onChange={changeEventHandler}
+                placeholder="199"
+                className="w-fit"
+              />
+            </div>
+          </div>
+          <div>
+            <Label>Course Thumbnail</Label>
+            <Input
+              type="file"
+              onChange={selectThumbnail}
+              accept="image/*"
+              className="w-fit"
+            />
+            {previewThumnail && (
+              <img
+                src={previewThumnail}
+                alt="Course Thumbnail"
+                className="e-64 my-2"
+              />
+            )}
+          </div>
+          <div>
+            <Button onClick={() => navigate("/admin/course")} variant="outline">
+              Cancel
+            </Button>
+            <Button disabled={isLoading} onClick={updateCourseHandler}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please Wait
+                </>
+              ) : (
+                "Save"
+              )}
+            </Button>
           </div>
         </div>
       </CardContent>

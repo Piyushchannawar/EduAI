@@ -17,8 +17,8 @@ const Sidebar = () => {
           </Link>
         </div>
       </div>
-    <div className="flex-1 md:p-24 p-2 bg-white">
-        <Outlet/>
+      <div className="flex-1 md:p-24 p-2 bg-white">
+        <Outlet />
       </div>
     </div>
   );
