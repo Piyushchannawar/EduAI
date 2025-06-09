@@ -18,9 +18,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useEditCourseMutation } from "@/features/api/courseApi";
 import { Loader2 } from "lucide-react";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 function CourseTab() {
   const isPublished = true;
@@ -35,6 +37,11 @@ function CourseTab() {
   });
 
   const [previewThumnail, setPreviewThumbnail] = useState("");
+  const params = useParams();
+  const courseId = params.courseId
+
+  const [editCourse, { data, isLoading, isSuccess, error }] =
+    useEditCourseMutation();
 
   const changeEventHandler = (e) => {
     setInput({
@@ -67,19 +74,36 @@ function CourseTab() {
       const fileReader = new FileReader();
       fileReader.onloadend = () => {
         setPreviewThumbnail(fileReader.result);
-        
       };
       fileReader.readAsDataURL(file);
     }
   };
 
-  const updateCourseHandler = () => {
+  const updateCourseHandler = async () => {
     // Function to handle course update logic
     // This function will typically involve making an API call to update the course details
-    console.log("Course updated with data:", input);
-  }
+    const formData = new FormData();
+    formData.append("corseTitle", input);
+    formData.append("courseTitle", input.courseTitle);
+    formData.append("subTitle", input.subTitle);
+    formData.append("description", input.description);
+    formData.append("category", input.category);
+    formData.append("courseLevel", input.courseLevel);
+    formData.append("coursePrice", input.coursePrice);
+    formData.append("courseThumbnail", input.courseThumbnail);
 
-  const isLoading = false;
+    await editCourse({formData, courseId});
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(data?.message || "Course Updated Successfully");
+    }
+    if (error) {
+      toast.error(error.data.message || "Failed to update course");
+    }
+  }, [isSuccess, error]);
+
   const navigate = useNavigate();
 
   return (
@@ -115,7 +139,6 @@ function CourseTab() {
             <Input
               type="text"
               value={input.subTitle}
-
               onChange={changeEventHandler}
               placeholder="Enter course subtitle"
               name="subTitle"
