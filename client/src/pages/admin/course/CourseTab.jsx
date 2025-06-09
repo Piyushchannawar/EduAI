@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEditCourseMutation } from "@/features/api/courseApi";
+import { useEditCourseMutation, useGetCourseByIdQuery } from "@/features/api/courseApi";
 import { Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -35,10 +35,28 @@ function CourseTab() {
     coursePrice: "",
     courseThumbnail: "",
   });
+  const params = useParams();
+ const courseId = params.courseId
+  const {data:courseByIdData, isLoading:courseByIdLoading} = useGetCourseByIdQuery(courseId,{refetchOnMountOrArgChange:true})
+
+  useEffect(()=>{
+    if(courseByIdData?.course){
+      const course = courseByIdData?.course;
+      setInput({
+        courseTitle: course.courseTitle,
+        subTitle: course.subTitle,
+        description: course.description,
+        category: course.category,
+        courseLevel: course.courseLevel,
+        coursePrice: course.coursePrice,
+        courseThumbnail: "",
+      })
+    }
+  },[courseByIdData])
 
   const [previewThumnail, setPreviewThumbnail] = useState("");
-  const params = useParams();
-  const courseId = params.courseId
+  
+ 
 
   const [editCourse, { data, isLoading, isSuccess, error }] =
     useEditCourseMutation();
@@ -105,6 +123,8 @@ function CourseTab() {
   }, [isSuccess, error]);
 
   const navigate = useNavigate();
+
+  if(isLoading) return <Loader2 className="h-4 w-4 animate-spin" />
 
   return (
     <Card>
