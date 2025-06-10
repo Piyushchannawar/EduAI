@@ -18,14 +18,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEditCourseMutation, useGetCourseByIdQuery } from "@/features/api/courseApi";
+import { useEditCourseMutation, useGetCourseByIdQuery, usePublishCourseMutation } from "@/features/api/courseApi";
 import { Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 function CourseTab() {
-  const isPublished = true;
   const [input, setInput] = React.useState({
     courseTitle: "",
     subTitle: "",
@@ -37,7 +36,7 @@ function CourseTab() {
   });
   const params = useParams();
  const courseId = params.courseId
-  const {data:courseByIdData, isLoading:courseByIdLoading} = useGetCourseByIdQuery(courseId,{refetchOnMountOrArgChange:true})
+  const {data:courseByIdData, isLoading:courseByIdLoading, refetch} = useGetCourseByIdQuery(courseId,{refetchOnMountOrArgChange:true})
 
   useEffect(()=>{
     if(courseByIdData?.course){
@@ -55,6 +54,7 @@ function CourseTab() {
   },[courseByIdData])
 
   const [previewThumnail, setPreviewThumbnail] = useState("");
+  const [publishCourse] = usePublishCourseMutation();
   
  
 
@@ -113,6 +113,18 @@ function CourseTab() {
     await editCourse({formData, courseId});
   };
 
+  const publishStatusHandler = async (action) => {
+    try {
+        const response = await publishCourse({courseId, query:action});
+        if(response.data){
+          refetch();
+          toast.success(response.data.message);
+        }
+    } catch (error) {
+      toast.error("Failed to publish or unpublish course")
+    }
+  }
+
   useEffect(() => {
     if (isSuccess) {
       toast.success(data?.message || "Course Updated Successfully");
@@ -126,6 +138,8 @@ function CourseTab() {
 
   if(isLoading) return <Loader2 className="h-4 w-4 animate-spin" />
 
+
+
   return (
     <Card>
       <CardHeader className="flex flex-row justify-between">
@@ -136,8 +150,8 @@ function CourseTab() {
           </CardDescription>
         </div>
         <div className="space-x-2">
-          <Button variant="outline">
-            {isPublished ? "Unpublish Course" : "Publish Course"}
+          <Button variant="outline" disabled={courseByIdData?.course.lectures.length === 0} onClick={()=> publishStatusHandler(courseByIdData?.course.isPublished ? "false" : "true")}>
+            {courseByIdData?.course.isPublished ? "Unpublish Course" : "Publish Course"}
           </Button>
           <Button>Remove Course</Button>
         </div>
