@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import courseRoute from "./routes/course.route.js"
 import mediaRoute from "./routes/media.route.js"
+import coursePurchaseRoutes from "./routes/coursePurchase.route.js"
 
 
 dotenv.config();
@@ -32,6 +33,7 @@ const PORT = process.env.PORT || 3000;
 app.use("/api/v1/media",mediaRoute);
 app.use("/api/v1/user",userRoute);
 app.use("/api/v1/course",courseRoute);
+app.use("/api/v1/purchase", coursePurchaseRoutes)
 
 
 
