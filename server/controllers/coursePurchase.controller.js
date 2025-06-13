@@ -109,7 +109,7 @@ export const getCourseDetailWithPurchaseStatus = async (req, res) => {
 
     return res.status(200).json({
       course,
-      purchased: !!purchased,
+      purchased: !!purchased, // true if purchesed or false otherwise
     });
   } catch (error) {
     console.log(error);
