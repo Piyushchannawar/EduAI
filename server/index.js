@@ -7,6 +7,7 @@ import cors from 'cors';
 import courseRoute from "./routes/course.route.js"
 import mediaRoute from "./routes/media.route.js"
 import coursePurchaseRoutes from "./routes/coursePurchase.route.js"
+import courseProgressRoute from "./routes/courseProgress.route.js"
 
 
 dotenv.config();
@@ -34,6 +35,8 @@ app.use("/api/v1/media",mediaRoute);
 app.use("/api/v1/user",userRoute);
 app.use("/api/v1/course",courseRoute);
 app.use("/api/v1/purchase", coursePurchaseRoutes)
+app.use("/api/v1/progress", courseProgressRoute)
+
 
 
 
