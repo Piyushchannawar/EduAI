@@ -104,35 +104,38 @@ useEffect(()=>{
 
 export default Navbar;
 
-const MobileNavbar = () => {
-    const role = "instructor";
+const MobileNavbar = ({user}) => {
+  const navigate = useNavigate();
+  
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button size='icon' className="rounded-full bg-gray-200 hover:bg-gray-200" variant="outline">
-            <Menu />
+        <Button
+          size="icon"
+          className="rounded-full hover:bg-gray-200"
+          variant="outline"
+        >
+          <Menu />
         </Button>
       </SheetTrigger>
       <SheetContent className="flex flex-col">
-        <SheetHeader className="flex flex-row items-center justify-between mt-6">
-          <SheetTitle>EduAI</SheetTitle>
-        <DarkMode />
+        <SheetHeader className="flex flex-row items-center justify-between mt-2">
+          <SheetTitle> <Link to="/">E-Learning</Link></SheetTitle>
+          <DarkMode />
         </SheetHeader>
-        <Separator className="mr-2"/>
+        <Separator className="mr-2" />
         <nav className="flex flex-col space-y-4">
-            <span>My Learning</span>
-            <span>Edit Profile</span>
-            <span>Logout</span>
+          <Link to="/my-learning">My Learning</Link>
+          <Link to="/profile">Edit Profile</Link>
+          <p>Log out</p>
         </nav>
-        {
-            role === "instructor" && (
-                <SheetFooter>
-                    <SheetClose asChild>
-                        <Button type="submit">Dashboard</Button>
-                    </SheetClose>
-                </SheetFooter>
-            )
-        }
+        {user?.role === "instructor" && (
+          <SheetFooter>
+            <SheetClose asChild>
+              <Button type="submit" onClick={()=> navigate("/admin/dashboard")}>Dashboard</Button>
+            </SheetClose>
+          </SheetFooter>
+        )}
       </SheetContent>
     </Sheet>
   );
