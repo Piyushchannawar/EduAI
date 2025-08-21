@@ -27,43 +27,7 @@ LearnSphere is a full-stack **Learning Management System (LMS)** that enables in
 **Payments:** Razorpay (Orders API + Webhooks)  
 **Cloud Storage:** (Cloudinary / AWS S3 if used)  
 
----
-
-## 🏗️ Project Architecture  
-
-```mermaid
-flowchart TD
-    A[Frontend - React] -->|Buy Course| B[Backend - Express API]
-    B -->|Create Order| C[Razorpay API]
-    C -->|OrderId| B
-    B -->|OrderId + Key| A
-    A -->|Payment Success| B
-    B -->|Verify Signature| D[Database - MongoDB]
-    C -->|Webhook (confirmation)| B
-    B -->|Update Status| D
-    D -->|Grant Access| A
-
-
-LearnSphere/
-│── backend/
-│   ├── models/
-│   │   ├── User.js
-│   │   ├── Course.js
-│   │   ├── Lecture.js
-│   │   └── CoursePurchase.js
-│   ├── routes/
-│   ├── controllers/
-│   ├── utils/
-│   └── server.js
-│
-│── frontend/
-│   ├── src/
-│   ├── components/
-│   ├── pages/
-│   └── App.js
-│
-│── README.md
-
+----
 
 💳 Payment Flow
 
@@ -104,4 +68,12 @@ Payment amount always derived from DB (not client).
 📱 Mobile App with React Native
 
 🎯 AI-based course recommendations
+
+<img width="2169" height="1201" alt="Screenshot 2025-08-21 163211" src="https://github.com/user-attachments/assets/f9e3b5d6-5b65-4031-9ae7-3c0aa3e316a6" />
+<img width="2192" height="711" alt="Screenshot 2025-08-21 163253" src="https://github.com/user-attachments/assets/c576a181-5bbb-436d-a0d8-d03017fd78c2" />
+<img width="2220" height="873" alt="Screenshot 2025-08-21 163307" src="https://github.com/user-attachments/assets/b0eb6bf8-e331-40c1-831c-e1c84ee71652" />
+<img width="2217" height="978" alt="Screenshot 2025-08-21 163325" src="https://github.com/user-attachments/assets/d12b9f48-b52e-46af-a945-259e6a2f1122" />
+<img width="2204" height="715" alt="Screenshot 2025-08-21 163336" src="https://github.com/user-attachments/assets/a612e913-3ebc-48f3-9c2f-3551010d9449" />
+<img width="2184" height="706" alt="Screenshot 2025-08-21 163351" src="https://github.com/user-attachments/assets/92800df9-5cb6-4b06-a49f-aa806407959e" />
+
 
